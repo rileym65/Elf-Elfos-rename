@@ -34,7 +34,7 @@ start:
            ldn     ra                  ; get character
            lbnz    good                ; jump if non-zero
            sep     scall               ; otherwise display usage
-           dw      f_inmsg
+           dw      o_inmsg
            db      'Usage: rename source dest',10,13,0
            sep     sret                ; and return to os
 good:      ghi     ra                  ; copy argument address to rf
@@ -59,7 +59,7 @@ loop_3:    lda     rf                  ; move past any spaces
            ldn     rf                  ; get character
            lbnz    loop2               ; jump if non-zero
            sep     scall               ; otherwise display usage
-           dw      f_inmsg
+           dw      o_inmsg
            db      'Usage: rename source dest',10,13,0
            sep     sret                ; and return to os
 loop2:     lda     rf                  ; look for first less <= space
