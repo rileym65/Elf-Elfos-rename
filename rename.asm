@@ -9,21 +9,9 @@
 include    bios.inc
 include    kernel.inc
 
-           org     8000h
-           lbr     0ff00h
-           db      'rename',0
-           dw      9000h
-           dw      endrom+7000h
-           dw      2000h
-           dw      endrom-2000h
-           dw      2000h
-           db      0
-
            org     2000h
-           br      start
-
-include    date.inc
-include    build.inc
+begin:     br      start
+           eever
            db      'Written by Michael H. Riley',0
 
 start:
@@ -36,6 +24,7 @@ start:
            sep     scall               ; otherwise display usage
            dw      o_inmsg
            db      'Usage: rename source dest',10,13,0
+           ldi     0ah
            sep     sret                ; and return to os
 good:      ghi     ra                  ; copy argument address to rf
            phi     rf
@@ -61,6 +50,7 @@ loop_3:    lda     rf                  ; move past any spaces
            sep     scall               ; otherwise display usage
            dw      o_inmsg
            db      'Usage: rename source dest',10,13,0
+           ldi     0ah
            sep     sret                ; and return to os
 loop2:     lda     rf                  ; look for first less <= space
            smi     33
@@ -81,9 +71,13 @@ loop2:     lda     rf                  ; look for first less <= space
            plo     rf
            sep     scall               ; display it
            dw      o_msg
-renamed:   sep     sret                ; return to os
+           ldi     0ffh
+           sep     sret
+renamed:   ldi     0
+           sep     sret                ; return to os
 
 errmsg:    db      'File not found',10,13,0
 
 endrom:    equ     $
 
+           end     begin

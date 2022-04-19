@@ -1,12 +1,8 @@
 PROJECT = rename
 
 $(PROJECT).prg: $(PROJECT).asm bios.inc
-	../../dateextended.pl > date.inc
-	../../build.pl > build.inc
-	rcasm -l -v -x -d 1802 $(PROJECT) 2>&1 | tee $(PROJECT).lst
-	cat $(PROJECT).prg | sed -f adjust.sed > x.prg
-	rm $(PROJECT).prg
-	mv x.prg $(PROJECT).prg
+	asm02 -l -L $(PROJECT).asm
+	link02 -e $(PROJECT).prg -o $(PROJECT).bin
 
 hex: $(PROJECT).prg
 	cat $(PROJECT).prg | ../../tointel.pl > $(PROJECT).hex
